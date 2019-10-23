@@ -44,3 +44,6 @@ C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\HumaneSociety\
 C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.csprojAssemblyReference.cache
 C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.exe
 C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.pdb
+C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\TheHumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.csprojAssemblyReference.cache
+C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\TheHumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.exe
+C:\Users\jt10n\Desktop\devCodeCamp\Week_07\Projects\HumaneSociety\TheHumaneSociety\HumaneSociety\obj\Debug\HumaneSociety.pdb

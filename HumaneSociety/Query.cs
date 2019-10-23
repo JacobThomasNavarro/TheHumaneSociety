@@ -160,13 +160,50 @@ namespace HumaneSociety
             return employeeWithUserName == null;
         }
 
+        internal static void RemoveEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new NotImplementedException("employee doesn't exist!");
+            }
+            else
+            {
+                db.Employees.DeleteOnSubmit(employee);
+                db.SubmitChanges();
+            }
+        }
 
         //// TODO Items: ////
-        
+
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("What would you like to do?\n1)Create new Employee\n2)Retrieve existing employee\n3)Update employee\n4)Delete employee");
+            int input = Convert.ToInt32(Console.ReadLine());
+            switch (input)
+            {
+                case 1:
+                    UserEmployee userEmployee = new UserEmployee();
+                    userEmployee.CreateNewEmployee();
+                    break;
+
+                case 2:
+                    RetrieveEmployeeUser();
+                    break;
+
+                case 3:
+                    UserEmployee userEmployee1 = new UserEmployee();
+                    userEmployee1.UpdateEmployeeInfo();
+                    break;
+
+                case 4:
+                    RemoveEmployee(employee);
+                    break;
+
+                default:
+                    UserInterface.DisplayUserOptions("Input not accepted please try again");
+                    break;
+            }
         }
 
         // DONE: Animal CRUD Operations
