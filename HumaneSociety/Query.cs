@@ -206,13 +206,13 @@ namespace HumaneSociety
             }
         }
 
-        // TODO: Animal CRUD Operations
+        // DONE: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-            //Animal animalFromDb = db.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
+            Animal animalFromDb = db.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
 
             //animalFromDb.CategoryId = animal.CategoryId;
-            if(animal == null)
+            if (animal == null)
             {
                 throw new NotImplementedException();
             }
@@ -221,8 +221,6 @@ namespace HumaneSociety
                 db.Animals.InsertOnSubmit(animal);
                 db.SubmitChanges();
             }
-            
-            ////throw new NotImplementedException();
         }
 
         internal static Animal GetAnimalByID(int id)
@@ -240,8 +238,24 @@ namespace HumaneSociety
         }
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
-        {            
-            throw new NotImplementedException();
+        {
+            Animal animal = db.Animals.Where(a => a.AnimalId == animalId).FirstOrDefault();
+            if (animal == null)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                foreach (KeyValuePair<int, string> update in updates)
+                {
+                    if (update.Key == 1 || update.Key == 2 || update.Key == 3 || update.Key == 4 || update.Key == 5 || update.Key == 6 || update.Key == 7)
+                    {
+                        animal.Category.Name = update.Value;
+                    }
+                }
+
+                db.SubmitChanges();
+            }
         }
 
         internal static void RemoveAnimal(Animal animal)
@@ -263,12 +277,12 @@ namespace HumaneSociety
            
         }
          
-        // TODO: Misc Animal Things
+        // DONE: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
             if(categoryName == null)
             {
-                throw new NotImplementedException();
+                throw new System.ArgumentException("Not a valid category");
             }
             else
             {
@@ -306,7 +320,7 @@ namespace HumaneSociety
         }
 
         // TODO: Adoption CRUD Operations
-        internal static void Adopt(Animal animal, Client client)
+        internal static void Adopt(Animal animal, Client client)//specify from database that client is adopting an animal
         {
             if (animal == null)
             {
