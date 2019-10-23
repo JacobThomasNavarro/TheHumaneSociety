@@ -235,8 +235,9 @@ namespace HumaneSociety
         }
         
         // TODO: Animal Multi-Trait Search
-        internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates, string input) // parameter(s)?
+        internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
+            return db.Animals.Where(x => true);
             throw new NotImplementedException();
         }
          
@@ -283,16 +284,25 @@ namespace HumaneSociety
         }
 
         // TODO: Adoption CRUD Operations
-        internal static void Adopt(Animal animal, Client client)//specify from database that client is adopting an animal
-        {
+        internal static void Adopt(Animal animal, Client client)
+        { 
+
             if (animal == null)
             {
                 throw new System.ArgumentException("Animal ID or animal is not valid");
             }
             else
             {
-                Animal animalFromDb = db.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
+                Adoption adoption = new Adoption();
+                adoption.ClientId = client.ClientId;
+                adoption.AnimalId = animal.AnimalId;
+                adoption.ApprovalStatus = "Pending";
+                adoption.AdoptionFee = 75;
+                adoption.PaymentCollected = false;
+                db.Adoptions.InsertOnSubmit(adoption);
+                db.SubmitChanges();
             }
+
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -302,7 +312,21 @@ namespace HumaneSociety
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-            throw new NotImplementedException();
+            if(adoption == null)
+            {
+                throw new System.ArgumentException("Adoption not valid");
+            }
+            else
+            {
+                if(isAdopted == true)
+                {
+                    adoption.ApprovalStatus = "Approved";
+                }
+                else
+                {
+                    adoption.ApprovalStatus = "Not Approved";
+                }
+            }
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
@@ -313,13 +337,26 @@ namespace HumaneSociety
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-            throw new NotImplementedException();
+            var shots = db.AnimalShots.Where(a => a.AnimalId == animal.AnimalId);
+            return shots;
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
             Animal animalFromDb = db.Animals.Where(a => a.AnimalShots == animal.AnimalShots).FirstOrDefault();
-            throw new NotImplementedException();
+            AnimalShot newShot = new AnimalShot();
+            if (shotName == null)
+            {
+                throw new System.ArgumentException("Shot does not exist!");
+            }
+            else
+            {
+                newShot.Animal = animal;
+                newShot.DateReceived = DateTime.Now;
+                newShot.Shot = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
+                db.AnimalShots.InsertOnSubmit(newShot);
+                db.SubmitChanges();
+            }
         }
     }
 }
