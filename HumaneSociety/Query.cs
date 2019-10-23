@@ -160,13 +160,50 @@ namespace HumaneSociety
             return employeeWithUserName == null;
         }
 
+        internal static void RemoveEmployee(Employee employee)
+        {
+            if (employee == null)
+            {
+                throw new NotImplementedException("employee doesn't exist!");
+            }
+            else
+            {
+                db.Employees.DeleteOnSubmit(employee);
+                db.SubmitChanges();
+            }
+        }
 
         //// TODO Items: ////
-        
+
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("What would you like to do?\n1)Create new Employee\n2)Retrieve existing employee\n3)Update employee\n4)Delete employee");
+            int input = Convert.ToInt32(Console.ReadLine());
+            switch (input)
+            {
+                case 1:
+                    UserEmployee userEmployee = new UserEmployee();
+                    userEmployee.CreateNewEmployee();
+                    break;
+
+                case 2:
+                    RetrieveEmployeeUser();
+                    break;
+
+                case 3:
+                    UserEmployee userEmployee1 = new UserEmployee();
+                    userEmployee1.UpdateEmployeeInfo();
+                    break;
+
+                case 4:
+                    RemoveEmployee(employee);
+                    break;
+
+                default:
+                    UserInterface.DisplayUserOptions("Input not accepted please try again");
+                    break;
+            }
         }
 
         // TODO: Animal CRUD Operations
@@ -223,7 +260,7 @@ namespace HumaneSociety
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates, string input) // parameter(s)?
         {
-            throw new NotImplementedException();
+           
         }
          
         // TODO: Misc Animal Things
@@ -271,7 +308,21 @@ namespace HumaneSociety
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            throw new NotImplementedException();
+            if (animal == null)
+            {
+                throw new System.ArgumentException("Animal ID or animal is not valid");
+            }
+            else
+            {
+                Adoption adoption = new Adoption();
+                adoption.ClientId = client.ClientId;
+                adoption.AnimalId = animal.AnimalId;
+                adoption.ApprovalStatus = "Pending";
+                adoption.AdoptionFee = 75;
+                adoption.PaymentCollected = false;
+                db.Adoptions.InsertOnSubmit(adoption);
+                db.SubmitChanges();
+            }
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -292,12 +343,25 @@ namespace HumaneSociety
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-            throw new NotImplementedException();
+            var shots = db.AnimalShots.Where(a => a.AnimalId == animal.AnimalId);
+            return shots;
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            throw new NotImplementedException();
+            AnimalShot newShot = new AnimalShot();
+            if (shotName == null)
+            {
+                Console.WriteLine("Shot does not exist!");
+            }
+            else
+            {
+                newShot.Animal = animal;
+                newShot.DateReceived = DateTime.Now;
+                newShot.Shot = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
+                db.AnimalShots.InsertOnSubmit(newShot);
+                db.SubmitChanges();  
+            }
         }
     }
 }
