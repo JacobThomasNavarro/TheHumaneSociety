@@ -344,7 +344,8 @@ namespace HumaneSociety
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            var pendingAdoptions = db.Adoptions.Where(a => a.ApprovalStatus == "Pending");
+            return pendingAdoptions;
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
@@ -368,7 +369,9 @@ namespace HumaneSociety
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
-            throw new NotImplementedException();
+            Adoption adoption = db.Adoptions.Where(a => a.AnimalId == a.AnimalId && a.ClientId == a.ClientId).FirstOrDefault();
+            db.Adoptions.DeleteOnSubmit(adoption);
+            db.SubmitChanges();
         }
 
         // TODO: Shots Stuff
@@ -380,20 +383,20 @@ namespace HumaneSociety
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            Animal animalFromDb = db.Animals.Where(a => a.AnimalShots == animal.AnimalShots).FirstOrDefault();
             AnimalShot newShot = new AnimalShot();
-            if (shotName == null)
+            var shotVaccine = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
+            if (shotVaccine == null)
             {
-                throw new System.ArgumentException("Shot does not exist!");
-            }
-            else
-            {
-                newShot.Animal = animal;
-                newShot.DateReceived = DateTime.Now;
-                newShot.Shot = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
-                db.AnimalShots.InsertOnSubmit(newShot);
+                Shot shot = new Shot() { Name = shotName };
+                db.Shots.InsertOnSubmit(shot);
                 db.SubmitChanges();
+                shotVaccine = db.Shots.Where(s => s.Name == shotName).FirstOrDefault();
             }
+            newShot.AnimalId = animal.AnimalId;
+            newShot.DateReceived = DateTime.Now;
+            newShot.ShotId = shotVaccine.ShotId;
+            db.AnimalShots.InsertOnSubmit(newShot);
+            db.SubmitChanges();
         }
     }
 }
