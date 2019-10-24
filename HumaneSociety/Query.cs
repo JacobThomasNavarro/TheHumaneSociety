@@ -274,8 +274,16 @@ namespace HumaneSociety
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
-            return db.Animals.Where(x => true);
-            throw new NotImplementedException();
+            List<Animal> animals = db.Animals;
+            //var results = db.Animals.Where(a => a.AnimalId == a.CategoryId);
+            foreach (KeyValuePair<int, string> update in updates)
+            {
+                switch (update)
+                {
+                    
+                }
+            }
+            return animals;
         }
          
         // DONE: Misc Animal Things
@@ -320,7 +328,7 @@ namespace HumaneSociety
             }
         }
 
-        // TODO: Adoption CRUD Operations
+        // DONE: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         { 
 
